@@ -8,7 +8,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 
 var app = express();
 
@@ -77,8 +77,23 @@ app.get("/scrape", function (req, res) {
 
 });
 
+    app.get("/", function(req, res) {
+        db.article.find({}).then(function(dbArticleData) {
+        res.render("index", {headline : dbArticleData})
+        })
+    });
 
+    app.get("/saved", function(req, res) {
+        db.article.find({}).then(function(dbArticleData) {
+            res.render("saved", {savedArticles : dbArticleData})
+        })
+    });
 
+    app.get("/saved/:id", function(req, res) {
+        db.article.updateOne({ _id: req.params.id }, {saved: true}).then(function(data, err) {
+            
+        })
+    });
 
 
 
