@@ -11,8 +11,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/saved">Saved Articles</a>
       </li>
-      <a class="btn btn-primary btn-lg" href="#" role="button">Scrape for New Articles</a>
-      <a class="btn btn-primary btn-lg" href="/saved" role="button">Clear Articles</a>
+      <a class="btn btn-primary btn-lg scrape" href="/" role="button">Scrape for New Articles</a>
+      <br>
+      <a class="btn btn-primary btn-lg clear" href="/" role="button">Clear Articles</a>
     </ul>
   </div>
 </nav>
@@ -33,7 +34,6 @@
     <div class="card-body">
         <p>{{this.summary}}</p>
         <br>
-        <p class="card-text">click the button to save</p>
         <button data-id='{{this._id}}' class="btn btn-info save-article">Save Article</button>
     </div>
 </div>

@@ -84,6 +84,7 @@ app.get("/scrape", function (req, res) {
         db.article.find({}).then(function(dbArticleData) {
         res.render("index", {headline : dbArticleData})
         })
+    
     });
 
     //Get all articles that have been saved 
@@ -102,7 +103,7 @@ app.get("/scrape", function (req, res) {
 
     //Find article by id and delete article 
     app.get("/saved/:id", function(req, res) {
-        db.article.findOneAndDelete({ _id: req.params.id },  )
+        db.article.findOneAndDelete({ _id: req.params.id }, function(err, removed) {})
     });
 
     //Find article by id and add it's note 
