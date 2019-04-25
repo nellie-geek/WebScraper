@@ -67,35 +67,69 @@ app.get("/scrape", function (req, res) {
             articles.push(result);
 
             db.article.create(result)
+                .then(function(dbArticleData) {
+                    console.log(dbArticleData);
+                })
                 .catch(function(err) {
                 return console.log(err)
             });
-        })
+        });
 
-        console.log(articles);
     });
 
 });
 
+    //Get all articles from scrape
     app.get("/", function(req, res) {
         db.article.find({}).then(function(dbArticleData) {
         res.render("index", {headline : dbArticleData})
         })
     });
 
+    //Get all articles that have been saved 
     app.get("/saved", function(req, res) {
         db.article.find({}).then(function(dbArticleData) {
             res.render("saved", {savedArticles : dbArticleData})
         })
     });
 
+    //Find article by id and update the saved value from default to 
+    //true
     app.get("/saved/:id", function(req, res) {
-        db.article.updateOne({ _id: req.params.id }, {saved: true}).then(function(data, err) {
-            
-        })
+        db.article.updateOne({ _id: req.params.id }, {saved: true})
+        .then(function(data, err) {})
     });
 
+    //Find article by id and delete article 
+    app.get("/saved/:id", function(req, res) {
+        db.article.findOneAndDelete({ _id: req.params.id },  )
+    });
 
+    //Find article by id and add it's note 
+    app.get("/saved/:id", function(rerq, res) {
+        db.article.findOne({ _id: req.params.id})
+        .populate("note")
+        .then(function(dbArticleData) {
+            res.json(dbArticleData);
+        })
+        .catch(function(err) {
+            res.json(err);
+        });
+    });
+
+    //Find article by id and save/update the associated note
+    app.get("/saved/:id", function(req, res) {
+        db.note.create(req.body)
+            .then(function(dbnote) {
+                return db.article.findOneAndUpdate({ _id: req.params.id}, { new: true});
+            })
+            .then(function(dbArticleData) {
+                res.json(dbArticleData);
+            })
+            .catch(function(err) {
+                res.json(err);
+            });
+    });
 
 
 // Start our server so that it can begin listening to client requests.
